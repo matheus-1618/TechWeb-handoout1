@@ -1,6 +1,6 @@
 from utils import load_data, load_template, salvar_dados, build_response
 
-def index(request):
+def index(request,db):
      # A string de request sempre começa com o tipo da requisição (ex: GET, POST)
     if request.startswith('POST'):
         request = request.replace('\r', '')  # Remove caracteres indesejados
@@ -17,15 +17,15 @@ def index(request):
            key,value = chave_valor.split("=")
            if key == "titulo" or key == "detalhes":
                params[key] = value
-        salvar_dados("notes.json",params)
+        salvar_dados(db,params)
 
     # O RESTO DO CÓDIGO DA FUNÇÃO index CONTINUA DAQUI PARA BAIXO...
     # Cria uma lista de <li>'s para cada anotação
     # Se tiver curiosidade: https://docs.python.org/3/tutorial/datastructures.html#list-comprehensions
     note_template = load_template('components/note.html')
     notes_li = [
-        note_template.format(title=dados['titulo'], details=dados['detalhes'])
-        for dados in load_data('notes.json')
+        note_template.format(title=dados.title, details=dados.content)
+        for dados in load_data(db)
     ]
     notes = '\n'.join(notes_li)
     

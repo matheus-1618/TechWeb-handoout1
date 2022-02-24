@@ -2,6 +2,7 @@ import socket
 from pathlib import Path
 from utils import extract_route, read_file, build_response
 from views import index
+import database
 
 CUR_DIR = Path(__file__).parent
 
@@ -19,15 +20,15 @@ while True:
     client_connection, client_address = server_socket.accept()
 
     request = client_connection.recv(1024).decode()
-    print(request)
 
     route = extract_route(request)
 
+    db = database.Database("banco")
     filepath = CUR_DIR / route
     if filepath.is_file():
         response = build_response() + read_file(filepath)
     elif route == '':
-        response = index(request)
+        response = index(request,db)
     else:
         response = build_response()
 
