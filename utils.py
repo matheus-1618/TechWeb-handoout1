@@ -30,8 +30,7 @@ def salvar_dados(db,file):
     # in_file.append(file)
     # with open("data/notes.json", "w", encoding="utf-8") as dados:
     #     salvando = json.dump(in_file, dados, indent=2, separators=(",", ": "), sort_keys=True)
-    for k in file.keys():
-        db.add(database.Note(content=file[k], title=file[k]))
+    db.add(database.Note(content=file["detalhes"], title=file["titulo"]))
 
 def build_response(body='', code=200, reason='OK', headers=''):
     if headers != "":
